@@ -73,9 +73,18 @@ short sol3(unsigned long n, std::unordered_map<unsigned long, short> parity_map)
     return (parity_map[first_group] ^ parity_map[second_group] ^ parity_map[third_group] ^ parity_map[fourth_group]);
 }
 
+/**
+ * Time complexity is O(log(n))
+ */
 short sol4(unsigned long n)
 {
-    
+    n ^= (n >> 32);
+    n ^= (n >> 16); 
+    n ^= (n >> 8); 
+    n ^= (n >> 4); 
+    n ^= (n >> 2); 
+    n ^= (n >> 1); 
+    return (n & 0x1); // only last bit
 }
 
 /**
