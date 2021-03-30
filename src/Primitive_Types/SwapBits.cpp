@@ -1,6 +1,6 @@
 #include <iostream>
 
-int swap(int n, int i, int j)
+long swap(long n, int i, int j)
 {
     // todo
     return 0;
@@ -14,7 +14,8 @@ int swap(int n, int i, int j)
  */
 int main()
 {
-    int n, i, j;
+    long n;
+    int i, j;
     std::cout << "Enter number to swap:\n";
     std::cin >> n;
     std::cout << "Enter i (first index):\n";
