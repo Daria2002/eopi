@@ -1,9 +1,18 @@
 #include <iostream>
 
+// O(1) time complexity
 long swap(long n, int i, int j)
 {
-    // todo
-    return 0;
+    // check if i-th and j-th bits differ
+    int ith_bit = (n >> i) & 1;
+    int jth_bit = (n >> j) & 1;
+    if(ith_bit != jth_bit)
+    {
+        // swap bits by flipping their values
+        unsigned long mask = (1L << i) | (1L << j);
+        n ^= mask;
+    }
+    return n;
 }
 
 /**
