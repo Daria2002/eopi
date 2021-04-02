@@ -1,9 +1,19 @@
 #include <iostream>
+#include <unordered_map>
 
-long ReverseBits(long x)
+std::unordered_map<long, long> preprocess()
 {
     // todo
-    return 0;
+}
+
+long ReverseBits(long x, std::unordered_map<long, long> precomputed_reverse)
+{
+    const int group_size = 16;
+    const int mask = 0xFFFF;
+    return precomputed_reverse[x & mask] << (3*group_size) |
+    precomputed_reverse[(x >> group_size) & mask] << (2*group_size) |
+    precomputed_reverse[(x >> (group_size * 2)) & mask] << group_size |
+    precomputed_reverse[(x >> (group_size * 3)) & mask]; 
 }
 
 /**
@@ -16,5 +26,6 @@ int main()
     std::cout << "Enter number:\n";
     long n;
     std::cin >> n;
-    std::cout << "Reversed bits in number " << n << " result in number " << ReverseBits(n) << ".\n";
+    std::unordered_map<long, long> precomputed_reverse = preprocess();
+    std::cout << "Reversed bits in number " << n << " result in number " << ReverseBits(n, precomputed_reverse) << ".\n";
 }
