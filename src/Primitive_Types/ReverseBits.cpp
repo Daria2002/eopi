@@ -3,38 +3,43 @@
 #include <cmath>
 
 /* Function to reverse bits of num */
-unsigned int reverseBits(unsigned short int num)
+unsigned int reverseBits(unsigned int num)
 {
-    unsigned short int num_of_bits = sizeof(num) * 8;
-    unsigned short int reverse_num = 0, i, temp;
-    for (i = 0; i < num_of_bits; i++)
+    unsigned short int reverse_num = num;
+    for (int i = 0; i < 4; i++)
     {
-        temp = (num & (1 << i));
-        if(temp)
-            reverse_num |= (1 << ((num_of_bits - 1) - i));
+        if(((num >> i) & 1) != ((num >> 8 - 1 - i) & 1))
+        {
+            reverse_num ^= (1 << i);
+            reverse_num ^= (1 << (8 - 1 - i));
+        }
     }
-   
     return reverse_num;
 }
 
-std::unordered_map<unsigned short int, unsigned short int> preprocess(const int group_size)
+std::unordered_map<unsigned int, unsigned int> preprocess()
 {
-    std::unordered_map<unsigned short int, unsigned short int> precomputed_reverse;
-    const short int mask = 0xFFFF;
-    for(unsigned short int word_tmp = 0; word_tmp < pow(2, group_size + 1); word_tmp++)
+    std::unordered_map<unsigned int, unsigned int> precomputed_reverse;
+    for(int word_tmp = 0; word_tmp < pow(2, 8); word_tmp++)
     {
         precomputed_reverse[word_tmp] = reverseBits(word_tmp);
+        std::cout << "word_tmp = " << word_tmp << ", reversed = " << precomputed_reverse[word_tmp] << '\n';
     }
     return precomputed_reverse;
 }
 
-long long ReverseBits(long long x, std::unordered_map<unsigned short int, unsigned short int> precomputed_reverse, const int group_size)
+long long ReverseBits(long long x, std::unordered_map<unsigned int, unsigned int> precomputed_reverse)
 {
-    const short int mask = 0xFFFF;
-    return precomputed_reverse[x & mask] << (3*group_size) |
-    precomputed_reverse[(x >> group_size) & mask] << (2*group_size) |
-    precomputed_reverse[(x >> (group_size * 2)) & mask] << group_size |
-    precomputed_reverse[(x >> (group_size * 3)) & mask]; 
+    const int mask = 0x00FF;
+    return 
+        precomputed_reverse[x & mask] << (7*8) |
+        precomputed_reverse[(x >> 8) & mask] << (6*8) |
+        precomputed_reverse[(x >> (8 * 2)) & mask] << (5*8) |
+        precomputed_reverse[(x >> (8 * 3)) & mask] << (4*8) |
+        precomputed_reverse[(x >> (8 * 4)) & mask] << (3*8) |
+        precomputed_reverse[(x >> (8 * 5)) & mask] << (2*8) |
+        precomputed_reverse[(x >> (8 * 6)) & mask] << (1*8) |
+        precomputed_reverse[(x >> (8 * 7)) & mask]; 
 }
 
 /**
@@ -45,10 +50,9 @@ long long ReverseBits(long long x, std::unordered_map<unsigned short int, unsign
 int main()
 {    
     std::cout << "Enter number:\n";
-    long long n = 1; // 8 bytes = 64 bites
+    long long n = 0; // 8 bytes = 64 bites
     //std::cin >> n;
-    const int group_size = 16; // 2 bytes = 16 bits
     // unsigned short int = 4 bytes = 16 bits
-    std::unordered_map<unsigned short int, unsigned short int> precomputed_reverse = preprocess(group_size); 
-    std::cout << "Reversed bits in number " << n << " result in number " << ReverseBits(n, precomputed_reverse, group_size) << ".\n";
+    std::unordered_map<unsigned int, unsigned int> precomputed_reverse = preprocess(); 
+    std::cout << "Reversed bits in number " << n << " result in number " << ReverseBits(n, precomputed_reverse) << ".\n";
 }
