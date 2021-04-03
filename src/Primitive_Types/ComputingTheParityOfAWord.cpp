@@ -47,13 +47,17 @@ short sol2(unsigned long n)
  * n - number of bits
  * l - number of bits in a group
  */
-std::unordered_map<unsigned long, short> preprocess()
+std::unordered_map<unsigned long, short> preprocess(const int group_size)
 {
     std::unordered_map<unsigned long, short> parity_map;
-    for(int i = 0; i < 16; i++)
+    for(int i = 1; i < group_size; i++)
     {
-        unsigned long word = pow(2, i);
-        parity_map[word] = sol2(word);
+        unsigned long word_left = pow(2, i - 1);
+        unsigned long word_right = pow(2, i);
+        for(unsigned long word_tmp = word_left; word_tmp < word_right; word_tmp++)
+        {
+            parity_map[word_tmp] = sol2(word_tmp);
+        }
     }
     return parity_map;
 }
@@ -62,9 +66,8 @@ std::unordered_map<unsigned long, short> preprocess()
  * Optimal solution for lot of parity computations.
  * O(n/l) is time complexity, n - number of bits in a word, l - number of bits in per group
  */ 
-short sol3(unsigned long n, std::unordered_map<unsigned long, short> parity_map)
+short sol3(unsigned long n, std::unordered_map<unsigned long, short> parity_map, const int group_size)
 {
-    const int group_size = 16; 
     const int mask = 0xFFFF;
     unsigned long first_group = (n >> (3 * group_size));
     unsigned long second_group = ((n >> (2 * group_size)) & mask); 
@@ -103,7 +106,8 @@ int main()
     std::cout << "Enter a number for parity calculation:\n";
     std::cin >> n;
     short parity;
-    std::unordered_map<unsigned long, short> parity_map = preprocess(); // key - word, val - parity
+    const int group_size = 16;
+    std::unordered_map<unsigned long, short> parity_map = preprocess(group_size); // key - word, val - parity
     switch (method)
     {
     case 1:
@@ -113,7 +117,7 @@ int main()
         parity = sol2(n);
         break;
     case 3:
-        parity = sol3(n, parity_map);
+        parity = sol3(n, parity_map, group_size);
         break;
     default:
         parity = sol4(n);

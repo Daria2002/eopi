@@ -1,14 +1,26 @@
 #include <iostream>
 #include <unordered_map>
+#include <cmath>
 
-std::unordered_map<long, long> preprocess()
+std::unordered_map<unsigned long, unsigned long> preprocess(const int group_size)
 {
-    // todo
+    std::unordered_map<unsigned long, unsigned long> precomputed_reverse;
+    const int mask = 0xFFFF;
+    for(int i = 1; i < group_size; i++)
+    {
+        unsigned long word_left = pow(2, i - 1);
+        unsigned long word_right = pow(2, i);
+        for(unsigned long word_tmp = word_left; word_tmp < word_right; word_tmp++)
+        {
+            // todo: check this 
+            precomputed_reverse[word_tmp] = word_tmp ^ mask;
+        }
+    }
+    return precomputed_reverse;
 }
 
-long ReverseBits(long x, std::unordered_map<long, long> precomputed_reverse)
+long ReverseBits(long x, std::unordered_map<unsigned long, unsigned long> precomputed_reverse, const int group_size)
 {
-    const int group_size = 16;
     const int mask = 0xFFFF;
     return precomputed_reverse[x & mask] << (3*group_size) |
     precomputed_reverse[(x >> group_size) & mask] << (2*group_size) |
@@ -26,6 +38,7 @@ int main()
     std::cout << "Enter number:\n";
     long n;
     std::cin >> n;
-    std::unordered_map<long, long> precomputed_reverse = preprocess();
-    std::cout << "Reversed bits in number " << n << " result in number " << ReverseBits(n, precomputed_reverse) << ".\n";
+    const int group_size = 16;
+    std::unordered_map<unsigned long, unsigned long> precomputed_reverse = preprocess(group_size);
+    std::cout << "Reversed bits in number " << n << " result in number " << ReverseBits(n, precomputed_reverse, group_size) << ".\n";
 }
