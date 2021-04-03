@@ -50,14 +50,9 @@ short sol2(unsigned long n)
 std::unordered_map<unsigned long, short> preprocess(const int group_size)
 {
     std::unordered_map<unsigned long, short> parity_map;
-    for(int i = 1; i < group_size; i++)
+    for(unsigned long word_tmp = 0; word_tmp < pow(2, group_size + 1); word_tmp++)
     {
-        unsigned long word_left = pow(2, i - 1);
-        unsigned long word_right = pow(2, i);
-        for(unsigned long word_tmp = word_left; word_tmp < word_right; word_tmp++)
-        {
-            parity_map[word_tmp] = sol2(word_tmp);
-        }
+        parity_map[word_tmp] = sol2(word_tmp);
     }
     return parity_map;
 }
