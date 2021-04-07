@@ -1,10 +1,16 @@
 #include <iostream>
 
+/**
+ * O(n)
+ */
 unsigned add(unsigned x, unsigned y)
 {
 
 }
 
+/**
+ * O(n^2)
+ */
 unsigned multiply(unsigned x, unsigned y)
 {
     
