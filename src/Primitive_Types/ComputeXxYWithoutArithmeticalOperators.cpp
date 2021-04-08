@@ -5,7 +5,9 @@
  */
 unsigned add(unsigned x, unsigned y)
 {
-
+    unsigned sum = 0, carryin = 0, k = 1, temp_x = x, temp_y = y;
+    // todo
+    return sum | carryin;
 }
 
 /**
@@ -13,7 +15,16 @@ unsigned add(unsigned x, unsigned y)
  */
 unsigned multiply(unsigned x, unsigned y)
 {
-    
+    unsigned sum = 0;
+    while (x)
+    {
+        if(x & 1)
+        {
+            sum = add(sum, y);
+        }
+        x >>= 1, y <<= 1;
+    }
+    return sum;
 }
 
 /**
