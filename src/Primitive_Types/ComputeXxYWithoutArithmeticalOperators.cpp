@@ -6,7 +6,13 @@
 unsigned add(unsigned x, unsigned y)
 {
     unsigned sum = 0, carryin = 0, k = 1, temp_x = x, temp_y = y;
-    // todo
+    while(temp_x || temp_y)
+    {
+        unsigned x_k = x & k, y_k = y & k;
+        unsigned carryout = (x_k & y_k) | (x_k & carryin) | (y_k & carryin);
+        sum |= (x_k ^ y_k ^ carryin);
+        carryin = carryout << 1, k <<= 1, temp_x >>= 1, temp_y >>= 1;
+    }
     return sum | carryin;
 }
 
