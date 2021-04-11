@@ -2,7 +2,14 @@
 
 unsigned divide(unsigned x, unsigned y)
 {
-
+    unsigned result = 0;
+    int power = 32;
+    unsigned long long y_power = static_cast<unsigned long long>(y) << power;
+    while (x >= y)
+    {
+        // todo
+    }
+    return result;
 }
 
 /**
